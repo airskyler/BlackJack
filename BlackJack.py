@@ -1,15 +1,17 @@
 
 
 
-#    Project 1
+#    Project 1 -  By Jessy Mullen
+
 #    For this project, I got some help building the code by looking at some other people's
 #    work online to start this project.  But, I basically did write these code my self.
+
 #    some of the code reference url is
 
 #    https://github.com/AndreDegel/blackjack/blob/master/blackjack.py
 #    http://codereview.stackexchange.com/questions/57849/blackjack-game-with-classes-instead-of-functions
 
-#    Some stuff I ned to work on is... I need to have a Card class and deck class separately, I was trying to create
+#    Some stuff I need to work on is... I need to have a Card class and Deck class separately, I was trying to create
 #    a new class but, I couldn't figure out. I also should just use one counting function rather than two counting
 #    function.  I also need to work on counting the total wins and ties for the writing and reading file
 
