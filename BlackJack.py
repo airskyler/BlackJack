@@ -16,87 +16,11 @@
 
 
 
-import random
 
 
 
-RANKS = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
+from Deck import Deck
 
-SUITS = ('Heart', 'Diamonds', 'Club', 'Spades')
-
-
-
-
-
-class Card:
-
-
-
-# Create a card with suit and rank information
-    def __init__(self, suit, rank):
-        self.suit=suit
-        self.rank = rank
-
-
-    def __str__(self):
-        return self.suit+" "+str(self.rank)
-
-
-    def getSuit(self):
-        return self.suit
-
-
-    def getRank(self):
-        return self.rank
-
-
-
-class Deck:
-
-
-    # Create a deck of cards
-
-    def __init__(self):
-        self.cards = []
-
-        for suit in SUITS:
-            for rank in RANKS:
-                self.cards.append(Card(suit,rank))
-
-
-
-# Shuffle the deck of cards
-    def shuffle(self):
-        random.shuffle(self.cards)
-
-
-
-#   deal two cards
-    def draw_two(self):
-
-        card1 = random.choice(self.cards)
-        card2 = random.choice(self.cards)
-        hand = []
-        hand.append(card1)
-        hand.append(card2)
-        return hand
-
-
-#  deal one card
-    def draw_one(self):
-
-        card = random.choice(self.cards)
-
-        return card
-
-
-
-    def __str__(self):
-        result = " "
-        for card in self.cards:
-            result += " "+card.__str__()
-
-        return "Deck has cards of " + result
 
 
 
@@ -195,30 +119,46 @@ class Dealer:
 
 class playGame(object):
 
+
+
     def __init__(self):
 
         self.cards = Deck()
         self.cards.shuffle()
 
-#   deal two random cards to dealer and player
-        self.pCards = Player(self.cards.draw_two())
-        self.dCards = Dealer(self.cards.draw_two())
+        self.dWin = 0
+
+        self.pWin = 0
+
+        self.tie = 0
+
+
+
+    def getTie(self):
+
+        return self.tie
+
+
+    def getDwin(self):
+
+        return self.dWin
+
+
+    def getPwin(self):
+
+        return self.pWin
+
+
 
 
     def bjGame(self):
 
-        dWin = 0
-
-        pWin = 0
-
-        tie = 0
-
-        strT = 'Tie count is:  '
-        strD = 'Dealer win count is:  '
-        strP = 'Player win count is:  '
 
 
-        f = open('Winner Count', 'a')
+        #   deal two random cards to dealer and player
+        self.pCards = Player(self.cards.draw_two())
+        self.dCards = Dealer(self.cards.draw_two())
+
 
 
         pPoint = self.pCards.sumPoint()
@@ -243,8 +183,6 @@ class playGame(object):
                     pPoint = self.pCards.sumPoint()
                     print("Player's card :\n "+str(self.pCards) +"\n" + "   Point: " + str(pPoint)+"\n")
 
-                    if pPoint > 21:
-                        break
 
 
 
@@ -257,20 +195,17 @@ class playGame(object):
                     break
 
 
+            elif pPoint > 21:
+                break
+
+
+
 
         if pPoint <= 21 and (dPoint <= 21 and dPoint >= 17)and dPoint == pPoint:
 
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("It is a tie")
-            tie = tie + 1
-            f.write(strT + str(tie)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
-
+            self.tie = self.tie + 1
 
 
 
@@ -278,14 +213,7 @@ class playGame(object):
         elif pPoint > 21:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Player lose  \n")
-            dWin = dWin + 1
-            f.write(strD + str(dWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
+            self.dWin = self.dWin + 1
 
 
 
@@ -295,16 +223,7 @@ class playGame(object):
         elif pPoint <= 21 and (dPoint <= 21 and dPoint >= 17) and dPoint > pPoint:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Dealer win")
-            dWin = dWin + 1
-            f.write(strD + str(dWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
-
-
+            self.dWin = self.dWin + 1
 
 
 
@@ -312,15 +231,7 @@ class playGame(object):
 
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Player win")
-            pWin = pWin + 1
-            f.write(strP + str(pWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
-
+            self.pWin = self.pWin + 1
 
 
 
@@ -337,81 +248,47 @@ class playGame(object):
                 print("Dealer's card :\n " +str(self.dCards)+"\n"+ "   Point: "+str(dPoint)+"\n")
 
 
-                if dPoint > 17:
+                if dPoint >= 17:
                     break
+
+
+            else:
+                break
 
 
         if dPoint == pPoint:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("It is a tie")
-            tie = tie + 1
-            f.write(strT + str(tie)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
+            self.tie = self.tie + 1
 
 
 
         elif (dPoint <= 21 and pPoint <= 21) and dPoint > pPoint:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Dealer win")
-            dWin = dWin + 1
-            f.write(strD + str(dWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
+            self.dWin = self.dWin + 1
 
 
 
 
         elif (dPoint <= 21 and pPoint <= 21) and dPoint < pPoint:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
-            print("Dealer win")
-            dWin = dWin + 1
-            f.write(strD + str(dWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
-
-
+            print("Player win")
+            self.pWin = self.pWin + 1
 
 
 
         elif pPoint > 21 and dPoint <= 21:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Player lose, Dealer win  \n")
-            dWin = dWin + 1
-            f.write(strD + str(dWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
-
+            self.dWin = self.dWin + 1
 
 
 
         elif pPoint == 21 and dPoint < 21:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Player win")
-            pWin = pWin + 1
-            f.write(strP + str(pWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
+            self.pWin = self.pWin + 1
 
 
 
@@ -419,14 +296,7 @@ class playGame(object):
         elif dPoint > 21 and pPoint <= 21:
             print("P: "+str(pPoint)+ "   D: "+str(dPoint))
             print("Dealer lose, player win")
-            pWin = pWin + 1
-            f.write(strP + str(pWin)+"\n")
-            f.close()
-
-            f = open('Winner Count', 'r')
-            for line in f:
-                print(line)
-            f.close()
+            self.pWin = self.pWin + 1
 
 
 
@@ -437,12 +307,35 @@ class playGame(object):
 bj = playGame()
 def main():
 
-    playOrNot = input("Would you like to play Blackjack? Please type capital letter [ Y or N ]"+"\n")
-    if playOrNot == "Y":
-        bj.bjGame()
+    while True:
+        playOrNot = input("Would you like to play Blackjack? Please type capital letter [ Y or N ]"+"\n")
+        if playOrNot == "Y":
+            bj.bjGame()
 
-    else:
-        print("Game finished")
+        else:
+            print("Game finished")
+
+            strT = 'Tie count is:  '
+            strD = 'Dealer win count is:  '
+            strP = 'Player win count is:  '
+
+
+            f = open('Winner Count', 'w')
+
+            f.write(strT + str(bj.getTie())+"\n")
+            f.write(strD + str(bj.getDwin())+"\n")
+            f.write(strP + str(bj.getPwin())+"\n")
+
+            f.close()
+
+
+            f = open('Winner Count', 'r')
+            for line in f:
+                print(line)
+            f.close()
+
+
+            break
 
 
 main()
