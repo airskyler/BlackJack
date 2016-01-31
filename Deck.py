@@ -14,8 +14,6 @@ SUITS = ('Heart', 'Diamonds', 'Club', 'Spades')
 class Card:
 
 
-
-
 # Create a card with suit and rank information
     def __init__(self, suit, rank):
         self.suit=suit
